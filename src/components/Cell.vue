@@ -25,13 +25,19 @@
   >
     <template v-if="exploded">💥</template>
     <template v-else-if="hasMine">💣</template>
-    <template v-else-if="minesCount > 0">{{ minesCount }}</template>
+    <span
+      v-else-if="minesCount > 0"
+      class="font-mono font-semibold"
+      :class="textColor"
+    >{{ minesCount }}</span>
   </span>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import LayoutButton from './LayoutButton.vue';
+
+type MinesCount = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 0;
 
 export default defineComponent({
   components: { LayoutButton },
@@ -108,7 +114,23 @@ export default defineComponent({
     rightIndex(): number | null {
       return this.getIndexByRowAndColumn(this.row, this.column + 1);
     },
-    minesCount(): number {
+    textColor(): string | null {
+      const colors = {
+        0: null,
+        1: 'text-blue-500',
+        2: 'text-green-500',
+        3: 'text-red-500',
+        4: 'text-indigo-500',
+        5: 'text-pink-500',
+        6: 'text-yellow-500',
+        7: 'text-black',
+        8: 'text-grey-500',
+        9: 'text-grey-500',
+      };
+
+      return colors[this.minesCount];
+    },
+    minesCount(): MinesCount {
       const mines = [
         this.hasMineAtIndex(this.topIndex),
         this.hasMineAtIndex(this.topLeftIndex),
@@ -120,7 +142,7 @@ export default defineComponent({
         this.hasMineAtIndex(this.rightIndex),
       ];
 
-      return mines.filter((has) => has).length;
+      return mines.filter((has) => has).length as MinesCount;
     },
   },
   watch: {
