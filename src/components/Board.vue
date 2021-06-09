@@ -2,7 +2,8 @@
   <div class="flex justify-center p-4">
     <div class="bg-gray-200 border-4 border-gray-200 ">
       <container class="flex justify-between p-1 mb-1">
-        <div>somethign</div>
+        <digital-counter />
+
         <layout-button
           class="w-8 h-8"
           @click="reset"
@@ -14,7 +15,8 @@
             🙂
           </centered-emoij>
         </layout-button>
-        <div>somethign</div>
+
+        <digital-counter />
       </container>
       <container
         class="grid"
@@ -47,6 +49,7 @@ import { defineComponent } from 'vue';
 import Cell from './Cell.vue';
 import CenteredEmoij from './CenteredEmoij.vue';
 import Container from './Container.vue';
+import DigitalCounter from './DigitalCounter.vue';
 import LayoutButton from './LayoutButton.vue';
 
 const presets = {
@@ -60,7 +63,11 @@ const presets = {
 export default defineComponent({
   name: 'HelloWorld',
   components: {
-    Cell, Container, LayoutButton, CenteredEmoij,
+    Cell,
+    Container,
+    LayoutButton,
+    CenteredEmoij,
+    DigitalCounter,
   },
   data() {
     return {
