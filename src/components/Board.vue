@@ -1,8 +1,23 @@
 <template>
-  <div class="flex justify-center p-4 ">
-    <div class="border-4 border-gray-200">
-      <div
-        class="grid bg-gray-200 border-2 border-gray-100 border-t-gray-400 border-l-gray-400"
+  <div class="flex justify-center p-4">
+    <div class="bg-gray-200 border-4 border-gray-200 ">
+      <container class="flex justify-between p-1 mb-1">
+        <div>somethign</div>
+        <layout-button
+          class="w-8 h-8"
+          @click="reset"
+        >
+          <centered-emoij v-if="lost">
+            😵
+          </centered-emoij>
+          <centered-emoij v-else>
+            🙂
+          </centered-emoij>
+        </layout-button>
+        <div>somethign</div>
+      </container>
+      <container
+        class="grid"
         :style="`grid-template-columns: repeat(${settings.columns}, minmax(0, 1fr));grid-template-rows: repeat(${settings.rows}, minmax(0, 1fr));`"
       >
         <cell
@@ -14,6 +29,7 @@
           :marked="markedCells.indexOf(index) !== -1"
           :maybe="markedAsMaybeCells.indexOf(index) !== -1"
           :cell-index="index"
+          :active="active"
           :exploded="explodedCell === index"
           @discover="discoverCell"
           @explode="explodeCell"
@@ -21,7 +37,7 @@
           @mark-maybe="markCellAsMaybe"
           @unmark="unmarkCell"
         />
-      </div>
+      </container>
     </div>
   </div>
 </template>
@@ -29,6 +45,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import Cell from './Cell.vue';
+import CenteredEmoij from './CenteredEmoij.vue';
+import Container from './Container.vue';
+import LayoutButton from './LayoutButton.vue';
 
 const presets = {
   BEGINNER: {
@@ -40,7 +59,9 @@ const presets = {
 
 export default defineComponent({
   name: 'HelloWorld',
-  components: { Cell },
+  components: {
+    Cell, Container, LayoutButton, CenteredEmoij,
+  },
   data() {
     return {
       settings: presets.BEGINNER,
@@ -58,8 +79,25 @@ export default defineComponent({
     maxMines(): number {
       return this.totalMines - 1;
     },
+    active(): boolean {
+      return !this.lost && !this.won;
+    },
+    lost(): boolean {
+      return this.explodedCell !== null;
+    },
+    won(): boolean {
+      // @TOOD
+      return false;
+    },
   },
   methods: {
+    reset() {
+      this.mines = [];
+      this.markedCells = [];
+      this.markedAsMaybeCells = [];
+      this.discoveredCells = [];
+      this.explodedCell = null;
+    },
     initMines(initialCellIndex: number) {
       this.mines = [];
       const minesToAssign = [...Array(this.settings.mines)];

@@ -1,8 +1,8 @@
 <template>
-  <button
+  <layout-button
     v-if="!discovered && ! exploded"
-    type="button"
-    class="w-6 h-6 text-xs text-black border-2 border-gray-100 outline-none focus:outline-none border-b-gray-400 border-r-gray-400"
+    :disabled="!active"
+    class="w-6 h-6 text-sm"
     @click.exact="onClick"
     @click.ctrl.prevent.exact="onSecondaryClick"
     @click.meta.prevent.exact="onSecondaryClick"
@@ -14,11 +14,11 @@
     <template v-else-if="maybe">
       ?
     </template>
-  </button>
+  </layout-button>
   <span
     v-else
     type="button"
-    class="flex items-center justify-center w-6 h-6 text-sm shadow-sm"
+    class="flex items-center justify-center w-6 h-6 text-sm shadow-sm pointer-events-none"
     :class="{
       'bg-red-100': exploded
     }"
@@ -31,8 +31,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import LayoutButton from './LayoutButton.vue';
 
 export default defineComponent({
+  components: { LayoutButton },
   props: {
     cellIndex: {
       type: Number,
@@ -59,6 +61,10 @@ export default defineComponent({
       required: true,
     },
     exploded: {
+      type: Boolean,
+      required: true,
+    },
+    active: {
       type: Boolean,
       required: true,
     },
