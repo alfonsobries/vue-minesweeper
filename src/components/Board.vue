@@ -2,10 +2,13 @@
   <div class="flex justify-center p-4">
     <div class="bg-gray-200 border-4 border-gray-200 ">
       <container class="flex justify-between p-1 mb-1">
-        <digital-counter />
+        <digital-counter
+          :number="320"
+          :digits="3"
+        />
 
         <layout-button
-          class="w-8 h-8"
+          class="px-2"
           @click="reset"
         >
           <centered-emoij v-if="lost">
@@ -16,7 +19,10 @@
           </centered-emoij>
         </layout-button>
 
-        <digital-counter />
+        <digital-counter
+          :number="timeElapsed"
+          :digits="3"
+        />
       </container>
       <container
         class="grid"
@@ -77,6 +83,8 @@ export default defineComponent({
       markedCells: [] as Array<number>,
       markedAsMaybeCells: [] as Array<number>,
       explodedCell: null as null | number,
+      timeElapsed: 0,
+      timerInterval: null as null | number,
     };
   },
   computed: {
@@ -104,6 +112,18 @@ export default defineComponent({
       this.markedAsMaybeCells = [];
       this.discoveredCells = [];
       this.explodedCell = null;
+      this.timeElapsed = 0;
+      this.stopTimer();
+    },
+    initTimer() {
+      this.timerInterval = setInterval(() => {
+        this.timeElapsed += 1;
+      }, 1000);
+    },
+    stopTimer() {
+      if (this.timerInterval) {
+        clearInterval(this.timerInterval);
+      }
     },
     initMines(initialCellIndex: number) {
       this.mines = [];
@@ -116,6 +136,8 @@ export default defineComponent({
           this.mines.push(randomCellIndex);
         }
       } while (minesToAssign.length);
+
+      this.initTimer();
     },
     discoverCell(cellIndex: number) {
       if (this.mines.length === 0) {
@@ -128,6 +150,8 @@ export default defineComponent({
       this.explodedCell = cellIndex;
 
       this.mines.forEach(this.discoverCell);
+
+      this.stopTimer();
     },
     markCell(cellIndex: number) {
       this.markedCells.push(cellIndex);
