@@ -8,10 +8,12 @@
         <cell
           v-for="index in [...Array(totalMines).keys()]"
           :key="index"
-          :has-mine="mines.indexOf(index) !== -1"
-          :clicked="clickedCells.indexOf(index) !== -1"
+          :mines="mines"
+          :settings="settings"
+          :discovered="discoveredCells.indexOf(index) !== -1"
           :cell-index="index"
-          @clicked="onCellClicked"
+          @discover="discoverCell"
+          @explode="explodeCell"
         />
       </div>
     </div>
@@ -25,8 +27,8 @@ import Cell from './Cell.vue';
 const presets = {
   BEGINNER: {
     rows: 16,
-    columns: 16,
-    mines: 40,
+    columns: 15,
+    mines: 10,
   },
 };
 
@@ -37,7 +39,7 @@ export default defineComponent({
     return {
       settings: presets.BEGINNER,
       mines: [] as Array<number>,
-      clickedCells: [] as Array<number>,
+      discoveredCells: [] as Array<number>,
     };
   },
   computed: {
@@ -61,12 +63,15 @@ export default defineComponent({
         }
       } while (minesToAssign.length);
     },
-    onCellClicked(cellIndex: number) {
+    discoverCell(cellIndex: number) {
       if (this.mines.length === 0) {
         this.initMines(cellIndex);
       }
 
-      this.clickedCells.push(cellIndex);
+      this.discoveredCells.push(cellIndex);
+    },
+    explodeCell(cellIndex: number) {
+      // xx
     },
   },
 });

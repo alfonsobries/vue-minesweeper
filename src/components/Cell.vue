@@ -1,6 +1,6 @@
 <template>
   <button
-    v-if="!clicked"
+    v-if="!discovered"
     type="button"
     class="w-6 h-6 text-xs border-2 border-gray-100 outline-none focus:outline-none border-b-gray-400 border-r-gray-400"
     @click="onClick"
@@ -11,7 +11,7 @@
     class="flex items-center justify-center w-6 h-6 text-sm shadow-sm"
   >
     <template v-if="hasMine">💣</template>
-    <template v-else>{{ minesCount }}</template>
+    <template v-else-if="minesCount > 0">{{ minesCount }}</template>
   </span>
 </template>
 
@@ -32,12 +32,12 @@ export default defineComponent({
       type: Object,
       required: true,
     },
-    clicked: {
+    discovered: {
       type: Boolean,
       required: true,
     },
   },
-  emits: ['clicked', 'explode'],
+  emits: ['discover', 'explode'],
   computed: {
     hasMine(): boolean {
       return this.hasMineAtIndex(this.cellIndex);
@@ -72,7 +72,6 @@ export default defineComponent({
     rightIndex(): number | null {
       return this.getIndexByRowAndColumn(this.row, this.column + 1);
     },
-
     minesCount(): number {
       const mines = [
         this.hasMineAtIndex(this.topIndex),
@@ -86,6 +85,20 @@ export default defineComponent({
       ];
 
       return mines.filter((has) => has).length;
+    },
+  },
+  watch: {
+    discovered(discovered) {
+      if (discovered && this.minesCount === 0) {
+        this.discover(this.topIndex);
+        this.discover(this.topLeftIndex);
+        this.discover(this.topRightIndex);
+        this.discover(this.bottomIndex);
+        this.discover(this.bottomLeftIndex);
+        this.discover(this.bottomRightIndex);
+        this.discover(this.leftIndex);
+        this.discover(this.rightIndex);
+      }
     },
   },
   methods: {
@@ -102,13 +115,22 @@ export default defineComponent({
       }
       return (row * this.settings.columns) + column;
     },
+    discover(index: number | null) {
+      if (index === null) {
+        return;
+      }
+
+      this.$emit('discover', index);
+    },
+    explode(index: number) {
+      this.$emit('explode', index);
+    },
     onClick() {
-      this.$emit('clicked', this.cellIndex);
-      // if (this.hasMine) {
-      //   this.$emit('explode', this.cellIndex);
-      // } else {
-      //   this.$emit('clicked', this.cellIndex);
-      // }
+      if (this.hasMine) {
+        this.explode(this.cellIndex);
+      } else {
+        this.discover(this.cellIndex);
+      }
     },
   },
 });
