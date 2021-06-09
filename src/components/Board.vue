@@ -3,7 +3,7 @@
     <div class="bg-gray-200 border-4 border-gray-200 ">
       <container class="flex justify-between p-1 mb-1">
         <digital-counter
-          :number="320"
+          :number="missingMines"
           :digits="3"
         />
 
@@ -11,7 +11,10 @@
           class="px-2"
           @click="reset"
         >
-          <centered-emoij v-if="lost">
+          <centered-emoij v-if="won">
+            😎
+          </centered-emoij>
+          <centered-emoij v-else-if="lost">
             😵
           </centered-emoij>
           <centered-emoij v-else>
@@ -37,7 +40,8 @@
           :marked="markedCells.indexOf(index) !== -1"
           :maybe="markedAsMaybeCells.indexOf(index) !== -1"
           :cell-index="index"
-          :active="active"
+          :lost="lost"
+          :won="won"
           :exploded="explodedCell === index"
           @discover="discoverCell"
           @explode="explodeCell"
@@ -60,14 +64,24 @@ import LayoutButton from './LayoutButton.vue';
 
 const presets = {
   BEGINNER: {
-    rows: 16,
-    columns: 15,
+    rows: 9,
+    columns: 9,
     mines: 10,
+  },
+  INTERMEDIATE: {
+    rows: 16,
+    columns: 16,
+    mines: 40,
+  },
+  EXPERT: {
+    rows: 16,
+    columns: 30,
+    mines: 99,
   },
 };
 
 export default defineComponent({
-  name: 'HelloWorld',
+  name: 'Board',
   components: {
     Cell,
     Container,
@@ -77,7 +91,7 @@ export default defineComponent({
   },
   data() {
     return {
-      settings: presets.BEGINNER,
+      settings: presets.INTERMEDIATE,
       mines: [] as Array<number>,
       discoveredCells: [] as Array<number>,
       markedCells: [] as Array<number>,
@@ -91,18 +105,31 @@ export default defineComponent({
     totalMines(): number {
       return this.settings.rows * this.settings.columns;
     },
+    missingMines(): number {
+      return this.won ? 0 : Math.max(this.mines.length - this.markedCells.length, 0);
+    },
     maxMines(): number {
       return this.totalMines - 1;
-    },
-    active(): boolean {
-      return !this.lost && !this.won;
     },
     lost(): boolean {
       return this.explodedCell !== null;
     },
     won(): boolean {
-      // @TOOD
-      return false;
+      return (this.totalMines - this.mines.length) === this.discoveredCells.length;
+    },
+  },
+  watch: {
+    won(won) {
+      if (won) {
+        this.stopTimer();
+      }
+    },
+    lost(lost) {
+      if (lost) {
+        this.stopTimer();
+
+        this.mines.forEach(this.discoverCell);
+      }
     },
   },
   methods: {
@@ -144,14 +171,12 @@ export default defineComponent({
         this.initMines(cellIndex);
       }
 
-      this.discoveredCells.push(cellIndex);
+      if (this.discoveredCells.indexOf(cellIndex) === -1) {
+        this.discoveredCells.push(cellIndex);
+      }
     },
     explodeCell(cellIndex: number) {
       this.explodedCell = cellIndex;
-
-      this.mines.forEach(this.discoverCell);
-
-      this.stopTimer();
     },
     markCell(cellIndex: number) {
       this.markedCells.push(cellIndex);

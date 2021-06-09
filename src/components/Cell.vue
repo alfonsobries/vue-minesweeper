@@ -1,14 +1,14 @@
 <template>
   <layout-button
     v-if="!discovered && ! exploded"
-    :disabled="!active"
+    :disabled="lost || won"
     class="w-6 h-6 text-sm"
     @click.exact="onClick"
     @click.ctrl.prevent.exact="onSecondaryClick"
     @click.meta.prevent.exact="onSecondaryClick"
     @click.right.prevent.exact="onSecondaryClick"
   >
-    <template v-if="marked">
+    <template v-if="marked || won">
       🚩
     </template>
     <template v-else-if="maybe">
@@ -64,7 +64,11 @@ export default defineComponent({
       type: Boolean,
       required: true,
     },
-    active: {
+    lost: {
+      type: Boolean,
+      required: true,
+    },
+    won: {
       type: Boolean,
       required: true,
     },
@@ -155,6 +159,9 @@ export default defineComponent({
       this.$emit('discover', index);
     },
     explode(index: number) {
+      if (this.marked) {
+        return;
+      }
       this.$emit('explode', index);
     },
     mark(index: number) {
@@ -167,6 +174,9 @@ export default defineComponent({
       this.$emit('mark-maybe', index);
     },
     onClick() {
+      if (this.marked) {
+        return;
+      }
       if (this.hasMine) {
         this.explode(this.cellIndex);
       } else {
