@@ -11,9 +11,15 @@
           :mines="mines"
           :settings="settings"
           :discovered="discoveredCells.indexOf(index) !== -1"
+          :marked="markedCells.indexOf(index) !== -1"
+          :maybe="markedAsMaybeCells.indexOf(index) !== -1"
           :cell-index="index"
+          :exploded="explodedCell === index"
           @discover="discoverCell"
           @explode="explodeCell"
+          @mark="markCell"
+          @mark-maybe="markCellAsMaybe"
+          @unmark="unmarkCell"
         />
       </div>
     </div>
@@ -40,6 +46,9 @@ export default defineComponent({
       settings: presets.BEGINNER,
       mines: [] as Array<number>,
       discoveredCells: [] as Array<number>,
+      markedCells: [] as Array<number>,
+      markedAsMaybeCells: [] as Array<number>,
+      explodedCell: null as null | number,
     };
   },
   computed: {
@@ -71,7 +80,21 @@ export default defineComponent({
       this.discoveredCells.push(cellIndex);
     },
     explodeCell(cellIndex: number) {
-      // xx
+      this.explodedCell = cellIndex;
+
+      this.mines.forEach(this.discoverCell);
+    },
+    markCell(cellIndex: number) {
+      this.markedCells.push(cellIndex);
+    },
+    unmarkCell(cellIndex: number) {
+      const index = this.markedAsMaybeCells.indexOf(cellIndex);
+      this.markedAsMaybeCells.splice(index, 1);
+    },
+    markCellAsMaybe(cellIndex: number) {
+      const index = this.markedCells.indexOf(cellIndex);
+      this.markedCells.splice(index, 1);
+      this.markedAsMaybeCells.push(cellIndex);
     },
   },
 });

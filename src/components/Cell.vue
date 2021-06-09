@@ -1,16 +1,30 @@
 <template>
   <button
-    v-if="!discovered"
+    v-if="!discovered && ! exploded"
     type="button"
-    class="w-6 h-6 text-xs border-2 border-gray-100 outline-none focus:outline-none border-b-gray-400 border-r-gray-400"
-    @click="onClick"
-  />
+    class="w-6 h-6 text-xs text-black border-2 border-gray-100 outline-none focus:outline-none border-b-gray-400 border-r-gray-400"
+    @click.exact="onClick"
+    @click.ctrl.prevent.exact="onSecondaryClick"
+    @click.meta.prevent.exact="onSecondaryClick"
+    @click.right.prevent.exact="onSecondaryClick"
+  >
+    <template v-if="marked">
+      🚩
+    </template>
+    <template v-else-if="maybe">
+      ?
+    </template>
+  </button>
   <span
     v-else
     type="button"
     class="flex items-center justify-center w-6 h-6 text-sm shadow-sm"
+    :class="{
+      'bg-red-100': exploded
+    }"
   >
-    <template v-if="hasMine">💣</template>
+    <template v-if="exploded">💥</template>
+    <template v-else-if="hasMine">💣</template>
     <template v-else-if="minesCount > 0">{{ minesCount }}</template>
   </span>
 </template>
@@ -36,8 +50,20 @@ export default defineComponent({
       type: Boolean,
       required: true,
     },
+    marked: {
+      type: Boolean,
+      required: true,
+    },
+    maybe: {
+      type: Boolean,
+      required: true,
+    },
+    exploded: {
+      type: Boolean,
+      required: true,
+    },
   },
-  emits: ['discover', 'explode'],
+  emits: ['discover', 'explode', 'mark', 'mark-maybe', 'unmark'],
   computed: {
     hasMine(): boolean {
       return this.hasMineAtIndex(this.cellIndex);
@@ -116,7 +142,7 @@ export default defineComponent({
       return (row * this.settings.columns) + column;
     },
     discover(index: number | null) {
-      if (index === null) {
+      if (index === null || this.hasMine) {
         return;
       }
 
@@ -125,11 +151,29 @@ export default defineComponent({
     explode(index: number) {
       this.$emit('explode', index);
     },
+    mark(index: number) {
+      this.$emit('mark', index);
+    },
+    unmark(index: number) {
+      this.$emit('unmark', index);
+    },
+    markAsMaybe(index: number) {
+      this.$emit('mark-maybe', index);
+    },
     onClick() {
       if (this.hasMine) {
         this.explode(this.cellIndex);
       } else {
         this.discover(this.cellIndex);
+      }
+    },
+    onSecondaryClick() {
+      if (this.marked) {
+        this.markAsMaybe(this.cellIndex);
+      } else if (this.maybe) {
+        this.unmark(this.cellIndex);
+      } else {
+        this.mark(this.cellIndex);
       }
     },
   },
