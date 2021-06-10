@@ -8,12 +8,15 @@
     @click.meta.prevent.exact="onSecondaryClick"
     @click.right.prevent.exact="onSecondaryClick"
   >
-    <template v-if="marked || won">
+    <centered-emoij
+      v-if="marked || won"
+      small
+    >
       🚩
-    </template>
-    <template v-else-if="maybe">
+    </centered-emoij>
+    <span v-else-if="maybe">
       ?
-    </template>
+    </span>
   </layout-button>
   <span
     v-else
@@ -22,8 +25,8 @@
       'bg-red-100': exploded
     }"
   >
-    <template v-if="exploded">💥</template>
-    <template v-else-if="hasMine">💣</template>
+    <centered-emoij v-if="exploded">💥</centered-emoij>
+    <centered-emoij v-else-if="hasMine">💣</centered-emoij>
     <span
       v-else-if="minesCount > 0"
       class="font-mono font-semibold"
@@ -34,12 +37,13 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import CenteredEmoij from './CenteredEmoij.vue';
 import LayoutButton from './LayoutButton.vue';
 
 type MinesCount = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 0;
 
 export default defineComponent({
-  components: { LayoutButton },
+  components: { LayoutButton, CenteredEmoij },
   props: {
     cellIndex: {
       type: Number,
