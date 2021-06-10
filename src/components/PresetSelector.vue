@@ -5,7 +5,7 @@
       aria-label="Tabs"
     >
       <button
-        v-for="preset in Object.keys(presets)"
+        v-for="preset in presetNames"
         :key="preset"
         type="button"
         :class="{
@@ -55,6 +55,11 @@ export default defineComponent({
     },
   },
   emits: ['select-preset'],
+  computed: {
+    presetNames(): Array<PresetName> {
+      return Object.keys(this.presets) as Array<PresetName>;
+    },
+  },
   methods: {
     selectPreset(preset: PresetName) {
       this.$emit('select-preset', preset);
