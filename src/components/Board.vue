@@ -66,8 +66,8 @@
       </div>
     </div>
 
-    <div class="relative flex items-center justify-center p-10 mx-auto text-sm text-center text-gray-500">
-      <span class="items-center hidden px-3 sm:inline-flex">
+    <div class="relative flex flex-col items-center justify-center pt-10 mx-auto space-y-3 text-sm text-center text-gray-500 sm:flex-row whitespace-nowrap sm:space-y-0">
+      <span class="inline-flex items-center px-3">
         Made with
         <svg
           viewBox="0 0 20 20"
@@ -86,7 +86,7 @@
         >Alfonso Bribiesca</a></span>  <a
         href="https://github.com/alfonsobries/vue-minesweeper"
         target="_blank"
-        class="inline-flex items-center px-3 text-gray-500 underline border-l border-gray-200"
+        class="inline-flex items-center px-3 text-gray-500 underline border-gray-200 sm:border-l"
       ><svg
         width="16"
         height="16"
