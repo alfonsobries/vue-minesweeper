@@ -84,7 +84,7 @@
           target="_blank"
           class="ml-1 text-gray-500 underline"
         >Alfonso Bribiesca</a></span>  <a
-        href="#"
+        href="https://github.com/alfonsobries/vue-minesweeper"
         target="_blank"
         class="inline-flex items-center px-3 text-gray-500 underline border-l border-gray-200"
       ><svg
