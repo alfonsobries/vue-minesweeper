@@ -17,8 +17,7 @@
   </layout-button>
   <span
     v-else
-    type="button"
-    class="flex items-center justify-center w-6 h-6 text-sm shadow-sm pointer-events-none"
+    class="flex items-center justify-center w-6 h-6 text-sm border-t border-l border-gray-300 pointer-events-none"
     :class="{
       'bg-red-100': exploded
     }"
