@@ -8,7 +8,7 @@
       @select-preset="selectPreset"
     />
 
-    <div class="flex">
+    <div class="flex max-w-full overflow-auto">
       <div class="bg-gray-200 border-4 border-gray-200 ">
         <container class="flex justify-between p-1 mb-1">
           <digital-counter

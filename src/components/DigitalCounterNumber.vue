@@ -77,14 +77,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 
 type NumberPartConfig = [
   [boolean, boolean, boolean, boolean],
   [boolean, boolean, boolean, boolean],
 ];
 
-type NumbersConfig = {
+export type NumbersConfig = {
   0: NumberPartConfig,
   1: NumberPartConfig,
   2: NumberPartConfig,
@@ -95,8 +95,8 @@ type NumbersConfig = {
   7: NumberPartConfig,
   8: NumberPartConfig,
   9: NumberPartConfig,
-
 };
+
 const numbers: NumbersConfig = {
   0: [
     [true, true, false, true],
@@ -145,7 +145,7 @@ export default defineComponent({
   name: 'DigitalCounterNumber',
   props: {
     number: {
-      type: Number,
+      type: Number as PropType<keyof NumbersConfig>,
       required: true,
     },
   },

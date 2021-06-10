@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import DigitalCounterNumber from './DigitalCounterNumber.vue';
+import DigitalCounterNumber, { NumbersConfig } from './DigitalCounterNumber.vue';
 
 export default defineComponent({
   name: 'DigitalCounter',
@@ -26,7 +26,7 @@ export default defineComponent({
     },
   },
   computed: {
-    numbers(): number[] {
+    numbers(): Array<keyof NumbersConfig> {
       const numbers = String(this.number)
         .split('')
         .map((digit) => Number(digit));
@@ -35,7 +35,7 @@ export default defineComponent({
         numbers.unshift(0);
       }
 
-      return numbers;
+      return numbers as Array<keyof NumbersConfig>;
     },
   },
 });

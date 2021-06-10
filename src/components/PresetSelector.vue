@@ -1,45 +1,23 @@
 <template>
-  <div>
-    <div class="sm:hidden">
-      <label
-        for="tabs"
-        class="sr-only"
-      >Select a preset</label>
-      <select
-        id="tabs"
-        name="tabs"
-        class="block w-full border-gray-300 rounded-md "
-        @change="(e) => selectPreset(e.currentTarget.value)"
+  <div class="max-w-full overflow-x-auto">
+    <nav
+      class="flex space-x-4"
+      aria-label="Tabs"
+    >
+      <button
+        v-for="preset in Object.keys(presets)"
+        :key="preset"
+        type="button"
+        :class="{
+          'bg-gray-100 text-gray-800': preset === selectedPreset,
+          'text-gray-500 hover:text-gray-900': preset !== selectedPreset,
+        }"
+        class="px-3 py-2 text-sm rounded-md"
+        @click="selectPreset(preset)"
       >
-        <option
-          v-for="preset in Object.keys(presets)"
-          :key="preset"
-          :selected="preset === selectedPreset ? true : undefined"
-        >
-          {{ preset }}
-        </option>
-      </select>
-    </div>
-    <div class="hidden sm:block">
-      <nav
-        class="flex space-x-4"
-        aria-label="Tabs"
-      >
-        <button
-          v-for="preset in Object.keys(presets)"
-          :key="preset"
-          type="button"
-          :class="{
-            'bg-gray-100 text-gray-800': preset === selectedPreset,
-            'text-gray-500 hover:text-gray-900': preset !== selectedPreset,
-          }"
-          class="px-3 py-2 text-sm rounded-md"
-          @click="selectPreset(preset)"
-        >
-          {{ preset }}
-        </button>
-      </nav>
-    </div>
+        {{ preset }}
+      </button>
+    </nav>
   </div>
 </template>
 
