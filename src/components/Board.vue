@@ -80,7 +80,7 @@
         /></svg>
         by
         <a
-          href="https://www.vexilo.com/"
+          href="https://twitter.com/alfonsobries"
           target="_blank"
           class="ml-1 text-gray-500 underline"
         >Alfonso Bribiesca</a></span>  <a
