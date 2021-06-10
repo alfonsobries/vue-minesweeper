@@ -5,8 +5,8 @@
         <span
           class="block h-3 border-2 border-transparent  -mr-0.5"
           :class="{
-            'border-l-red-500': inOn(number,0,3),
-            'border-l-red-900 opacity-50': !inOn(number,0,3),
+            'border-l-red-500': isOn(number,0,3),
+            'border-l-red-900 opacity-50': !isOn(number,0,3),
           }"
         />
       </span>
@@ -14,16 +14,16 @@
         <span
           class="block w-3 border-2 border-transparent"
           :class="{
-            'border-t-red-500': inOn(number,0,0),
-            'border-t-red-900 opacity-50': !inOn(number,0,0),
+            'border-t-red-500': isOn(number,0,0),
+            'border-t-red-900 opacity-50': !isOn(number,0,0),
 
           }"
         />
         <span
           class="block w-3 border-2 border-transparent"
           :class="{
-            'border-b-red-500': inOn(number,0,2),
-            'border-b-red-900 opacity-50': !inOn(number,0,2),
+            'border-b-red-500': isOn(number,0,2),
+            'border-b-red-900 opacity-50': !isOn(number,0,2),
           }"
         />
       </span>
@@ -31,8 +31,8 @@
         <span
           class="block h-3 border-2 border-transparent  -ml-0.5"
           :class="{
-            'border-r-red-500': inOn(number,0,1),
-            'border-r-red-900 opacity-50': !inOn(number,0,1),
+            'border-r-red-500': isOn(number,0,1),
+            'border-r-red-900 opacity-50': !isOn(number,0,1),
           }"
         />
       </span>
@@ -42,8 +42,8 @@
         <span
           class="block h-3 border-2 border-transparent  -mr-0.5"
           :class="{
-            'border-l-red-500': inOn(number,1,3),
-            'border-l-red-900 opacity-50': !inOn(number,1,3),
+            'border-l-red-500': isOn(number,1,3),
+            'border-l-red-900 opacity-50': !isOn(number,1,3),
           }"
         />
       </span>
@@ -51,15 +51,15 @@
         <span
           class="block w-3 border-2 border-transparent"
           :class="{
-            'border-t-red-500': inOn(number,1,0),
-            'border-t-red-900 opacity-50': !inOn(number,1,0),
+            'border-t-red-500': isOn(number,1,0),
+            'border-t-red-900 opacity-50': !isOn(number,1,0),
           }"
         />
         <span
           class="block w-3 border-2 border-transparent"
           :class="{
-            'border-b-red-500': inOn(number,1,2),
-            'border-b-red-900 opacity-50': !inOn(number,1,2),
+            'border-b-red-500': isOn(number,1,2),
+            'border-b-red-900 opacity-50': !isOn(number,1,2),
           }"
         />
       </span>
@@ -67,8 +67,8 @@
         <span
           class="block h-3 border-2 border-transparent  -ml-0.5"
           :class="{
-            'border-r-red-500': inOn(number,1,1),
-            'border-r-red-900 opacity-50': !inOn(number,1,1),
+            'border-r-red-500': isOn(number,1,1),
+            'border-r-red-900 opacity-50': !isOn(number,1,1),
           }"
         />
       </span>
